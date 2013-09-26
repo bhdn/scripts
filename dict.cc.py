@@ -70,31 +70,34 @@ class Dict:
 				print("{0:{width}}  {1}".format(self.word_list[0][i], self.word_list[1][i], width=length))
 
 if __name__ == "__main__":
-	# Parse commandline
-	arg_parser = OptionParser(usage="Usage: %prog [options] [search]")
-	arg_parser.add_option("-q", "--quote",
-						  action="store_true", default=False,
-						  help="quote results for better shell scripting")
-	arg_parser.add_option("-r", "--results",
-						  type="int", default=15, metavar="NUMBER",
-						  help="only show NUMBER of results, default=15")
-	arg_parser.add_option("-d", "--dictionary",
-						  type="str", default="ende",
-						  help="choose dictionary (for example 'enfr' for English/French dictionary), default=ende")
-	(options, arguments) = arg_parser.parse_args()
-
-	# Check whether a search query is missing.
-	if len(arguments) < 1:
-		arg_parser.error("missing search query")
-	else:
-		query = " ".join(arguments)
-
-		myDict = Dict()
-		# Retrieve translation from dict.cc.
-		myDict.getResponse(dictionary=options.dictionary, query=query)
-		# Parse the response, exit on failure.
-		if myDict.parseResponse(options.results) == False:
-			exit(1)
-
-		# Print out a list of the results.
-		myDict.printResults(quote=options.quote)
+	try:
+		# Parse commandline
+		arg_parser = OptionParser(usage="Usage: %prog [options] [search]")
+		arg_parser.add_option("-q", "--quote",
+							  action="store_true", default=False,
+							  help="quote results for better shell scripting")
+		arg_parser.add_option("-r", "--results",
+							  type="int", default=15, metavar="NUMBER",
+							  help="only show NUMBER of results, default=15")
+		arg_parser.add_option("-d", "--dictionary",
+							  type="str", default="ende",
+							  help="choose dictionary (for example 'enfr' for English/French dictionary), default=ende")
+		(options, arguments) = arg_parser.parse_args()
+	
+		# Check whether a search query is missing.
+		if len(arguments) < 1:
+			arg_parser.error("missing search query")
+		else:
+			query = " ".join(arguments)
+	
+			myDict = Dict()
+			# Retrieve translation from dict.cc.
+			myDict.getResponse(dictionary=options.dictionary, query=query)
+			# Parse the response, exit on failure.
+			if myDict.parseResponse(options.results) == False:
+				exit(1)
+	
+			# Print out a list of the results.
+			myDict.printResults(quote=options.quote)
+	except KeyboardInterrupt:
+		pass
